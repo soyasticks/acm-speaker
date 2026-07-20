@@ -8,7 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
-  /* Integrated UI Additions matching the original layout style guidelines */
   .profile-form-group {
     width: 100%;
     max-width: 320px;
@@ -32,7 +31,6 @@
     border-color: var(--spidey-gold);
   }
   
-  /* Interstitial Round Card Panel View inside Game loop */
   .interstitial-panel {
     background: var(--panel);
     border: 2px dashed var(--spidey-gold);
@@ -60,7 +58,6 @@
     text-transform: uppercase;
   }
 
-  /* Upgraded feedback view containing dynamic title prominence sizing */
   .feedback {
     margin-top: 18px;
     min-height: 48px;
@@ -88,6 +85,8 @@
     border: 1px solid rgba(243,241,231,0.08);
     border-radius: var(--radius);
     padding: 20px;
+    display: flex;
+    flex-direction: column;
   }
   .leaderboard-list {
     list-style: none;
@@ -105,6 +104,30 @@
   .leaderboard-item:last-child { border-bottom: none; }
   .leaderboard-item.current-user { color: var(--spidey-gold); font-weight: 700; }
   
+  /* Clear Button Styling at the bottom */
+  .clear-leaderboard-btn {
+    align-self: center;
+    margin-top: 16px;
+    background: transparent;
+    border: 1px solid rgba(243, 241, 231, 0.2);
+    color: var(--muted);
+    padding: 6px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    transition: all 0.2s ease;
+  }
+  .clear-leaderboard-btn:hover:not(:disabled) {
+    border-color: var(--comic-red);
+    color: var(--web-white);
+    background: rgba(239, 68, 68, 0.1);
+  }
+  .clear-leaderboard-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
   .audio-toggle {
     position: fixed;
     top: 16px;
@@ -132,8 +155,7 @@
 
   <!-- ===================== START SCREEN ===================== -->
   <section class="screen screen--start" id="screen-start">
-    <p class="eyebrow">// COMMITTEE SHOWCASE EVENT</p>
-    <h1 class="hero-title">GUESS<span class="hero-title__sub">the</span>SPEAKER</h1>
+    <h1 class="hero-title" style="margin-top: 20px;">GUESS<span class="hero-title__sub">the</span>SPEAKER</h1>
     <p class="hero-tag">Your spidey-sense is the only clue you get. A movie quote drops in — you name the legend behind it before the web snaps shut.</p>
 
     <div class="rules-grid">
@@ -202,22 +224,20 @@
 
   <!-- ===================== END SCREEN ===================== -->
   <section class="screen screen--end" id="screen-end" hidden>
-    <p class="eyebrow">// SESSION COMPLETE</p>
-    <h2 class="end-rank" id="end-rank">RANK</h2>
+    <h2 class="end-rank" id="end-rank" style="margin-top: 20px;">RANK</h2>
     <p class="end-score"><span id="end-score-num">0</span><span class="end-score__unit">pts</span></p>
     <p class="end-detail" id="end-detail"></p>
 
     <div class="end-actions">
       <button class="btn btn--primary" id="btn-replay">Swing Again</button>
-      <button class="btn btn--ghost" id="btn-review">Review Answers</button>
     </div>
 
     <div class="leaderboard-container">
       <p class="eyebrow" style="margin-bottom: 0; text-align: center;">🏆 ALL-TIME LEADERBOARD</p>
       <ul class="leaderboard-list" id="leaderboard-list"></ul>
+      <!-- Clear Leaderboard button added at the bottom -->
+      <button class="clear-leaderboard-btn" id="btn-clear-leaderboard">Clear Records</button>
     </div>
-
-    <ol class="review-list" id="review-list" hidden></ol>
   </section>
 
 </main>

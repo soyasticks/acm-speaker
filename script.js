@@ -15,7 +15,7 @@ const state = {
   score: 0,
   streak: 0,
   bestStreak: 0,
-  answers: [],       
+  answers: [],      
   timer: null,
   timeLeft: ROUND_SECONDS,
   locked: false,
@@ -115,7 +115,7 @@ const screenEnd = document.getElementById('screen-end');
 const playerNameInput = document.getElementById('player-name');
 const btnStart = document.getElementById('btn-start');
 const btnReplay = document.getElementById('btn-replay');
-const btnReview = document.getElementById('btn-review');
+const btnClearLeaderboard = document.getElementById('btn-clear-leaderboard');
 const audioToggle = document.getElementById('audio-toggle');
 
 const hudRound = document.getElementById('hud-round');
@@ -137,7 +137,6 @@ const interstitialSub = document.getElementById('interstitial-sub');
 const endRank = document.getElementById('end-rank');
 const endScoreNum = document.getElementById('end-score-num');
 const endDetail = document.getElementById('end-detail');
-const reviewList = document.getElementById('review-list');
 const leaderboardList = document.getElementById('leaderboard-list');
 
 radarProgress.style.strokeDasharray = RADAR_CIRCUMFERENCE;
@@ -175,8 +174,10 @@ function renderLeaderboard() {
   const board = getLeaderboard();
   if (board.length === 0) {
     leaderboardList.innerHTML = `<li class="leaderboard-item" style="justify-content:center; color:var(--muted);">No records yet.</li>`;
+    btnClearLeaderboard.disabled = true;
     return;
   }
+  btnClearLeaderboard.disabled = false;
   board.forEach((entry, idx) => {
     const li = document.createElement('li');
     li.className = 'leaderboard-item';
@@ -187,6 +188,14 @@ function renderLeaderboard() {
     leaderboardList.appendChild(li);
   });
 }
+
+// Clear button logic
+btnClearLeaderboard.addEventListener('click', () => {
+  if (confirm("Clear all leaderboard historical scores?")) {
+    localStorage.removeItem('spidey_movie_leaderboard');
+    renderLeaderboard();
+  }
+});
 
 // ---- Game Progress Flow ----
 function startGame() {
@@ -339,7 +348,6 @@ function selectAnswer(picked, btnEl) {
   hudScore.textContent = state.score;
   state.answers.push({ quote: q.quote, answer: q.answer, picked: picked || '—', correct });
 
-  // Quick 1.2-second delay before clean progression
   setTimeout(() => {
     state.index += 1;
     triggerRoundInterstitial(false);
@@ -369,26 +377,10 @@ function endGame() {
   endRank.textContent = rank;
   endScoreNum.textContent = state.score;
   endDetail.textContent = `${correctCount}/${total} correct · best streak ${state.bestStreak}`;
-
-  reviewList.innerHTML = '';
-  state.answers.forEach((a, i) => {
-    const li = document.createElement('li');
-    li.className = `review-item ${a.correct ? 'is-correct' : 'is-wrong'}`;
-    li.innerHTML = `
-      <p class="review-item__q">${i + 1}. "${a.quote}"</p>
-      <p class="review-item__a">${a.correct ? '✓' : '✗'} ${a.answer}${a.correct ? '' : ` — you picked: ${a.picked}`}</p>
-    `;
-    reviewList.appendChild(li);
-  });
 }
 
 btnStart.addEventListener('click', startGame);
 btnReplay.addEventListener('click', startGame);
-btnReview.addEventListener('click', () => {
-  const hidden = reviewList.hidden;
-  reviewList.hidden = !hidden;
-  btnReview.textContent = hidden ? 'Hide Answers' : 'Review Answers';
-});
 
 audioToggle.addEventListener('click', () => {
   if (!audioCtx) initAudio();
