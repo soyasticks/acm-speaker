@@ -217,8 +217,21 @@ function startGame() {
   initAudio();
   if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
   
-  const fullyShuffledPool = shuffle(QUESTIONS.map((_, i) => i));
-  state.order = fullyShuffledPool.slice(0, Math.min(ROUNDS_PER_GAME, QUESTIONS.length));
+  // --- BALANCED BOLLYWOOD & HOLLYWOOD MIX SELECTION ---
+  // Split indices: First 25 are Bollywood (0-24), Last 25 are Hollywood (25-49)
+  const bollyIndices = shuffle(Array.from({ length: 25 }, (_, i) => i));
+  const hollyIndices = shuffle(Array.from({ length: 25 }, (_, i) => i + 25));
+  
+  // Pick 4 from one pool, 3 from the other (alternating randomly)
+  const isBollyDominant = Math.random() < 0.5;
+  const bollyCount = isBollyDominant ? 4 : 3;
+  const hollyCount = isBollyDominant ? 3 : 4;
+  
+  const selectedBolly = bollyIndices.slice(0, bollyCount);
+  const selectedHolly = hollyIndices.slice(0, hollyCount);
+  
+  // Combine and shuffle the final 7 questions for an unpredictable order
+  state.order = shuffle([...selectedBolly, ...selectedHolly]);
   
   state.index = 0;
   state.score = 0;
