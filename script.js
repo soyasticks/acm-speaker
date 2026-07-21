@@ -174,7 +174,8 @@ const QUESTIONS = [
   {
     quote: "I'm walkin' here!",
     options: ["Ratso Rizzo", "Joe Buck", "Enrico", "O'Daniel"],
-    answer: "Midnight Cowboy — Dustin Hoffman shouts at a real New York taxi that almost ran him over while filming."
+    answer: "Ratso Rizzo",
+    fact: "Midnight Cowboy — Dustin Hoffman shouts at a real New York taxi that almost ran him over while filming."
   },
   {
     quote: "It's alive! It's alive!",
